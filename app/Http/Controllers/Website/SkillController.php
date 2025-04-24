@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Website;
 use App\Models\Skill;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Website\SkillStoreRequest;
 use App\Http\Resources\Website\SkillResource;
 
 class SkillController extends Controller
@@ -22,9 +23,14 @@ class SkillController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(SkillStoreRequest $request)
     {
-        //
+        $skill = $request->storeSkill();
+
+        return response([
+            'skill' => new SkillResource($skill),
+            'message' => 'Skill created successfully',
+        ]);
     }
 
     /**
