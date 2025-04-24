@@ -35,16 +35,6 @@ class Skill extends Model
 
     ## Getters & Setters
 
-    public function setTagsAttribute($value)
-    {
-        $this->attributes['tags'] = '{' . implode(',', $value) . '}';
-    }
-
-    public function getTagsAttribute($value)
-    {
-        return str_getcsv(trim($value, '{}'));
-    }
-
     ## Scopes
 
     ## Other Methods
