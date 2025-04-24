@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Website;
 
 use App\Models\Skill;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Website\SkillResource;
 use App\Http\Requests\Website\SkillStoreRequest;
@@ -13,9 +14,11 @@ class SkillController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $skills = Skill::paginate(10);
+        $skills = Skill::search(term: $request->search)
+            ->tagged(tags: $request->tags ?? [])
+            ->paginate(10);
 
         return SkillResource::collection($skills);
     }

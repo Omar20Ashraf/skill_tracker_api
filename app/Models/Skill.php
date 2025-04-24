@@ -37,6 +37,27 @@ class Skill extends Model
 
     ## Scopes
 
+    public function setTagsAttribute($value)
+    {
+        $this->attributes['tags'] = json_encode(array_values($value));
+    }
+
+    public function scopeTagged($query, array $tags)
+    {
+        if (empty($tags)) return $query;
+        
+        return $query->where('tags', '@>', json_encode($tags));
+    }
+
+    public function scopeSearch($query, ?string $term)
+    {
+        if (! $term) return $query;
+
+        return $query->whereRaw(
+            "to_tsvector('english', name || ' ' || coalesce(description, '')) @@ plainto_tsquery('english', ?)",
+            [$term]
+        );
+    }
     ## Other Methods
 
     public function remove(): bool
