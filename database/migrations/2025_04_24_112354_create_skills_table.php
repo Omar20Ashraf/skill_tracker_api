@@ -21,13 +21,11 @@ return new class extends Migration
 
             $table->string('name');
             $table->text('description')->nullable();
-            $table->text('tags')->nullable();
+            $table->jsonb('tags')->nullable();
             $table->jsonb('metadata')->nullable();
 
             $table->timestamps();
         });
-
-        DB::statement('ALTER TABLE skills ALTER COLUMN tags TYPE text[] USING string_to_array(tags, \',\')');
 
         DB::statement("CREATE INDEX skills_fts_idx ON skills USING GIN (to_tsvector('english', name || ' ' || coalesce(description, '')))");
 
