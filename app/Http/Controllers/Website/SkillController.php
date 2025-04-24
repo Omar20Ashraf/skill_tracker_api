@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Website;
 
 use App\Models\Skill;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Website\SkillStoreRequest;
 use App\Http\Resources\Website\SkillResource;
+use App\Http\Requests\Website\SkillStoreRequest;
+use App\Http\Requests\Website\SkillUpdateRequest;
 
 class SkillController extends Controller
 {
@@ -44,9 +44,14 @@ class SkillController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Skill $skill)
+    public function update(SkillUpdateRequest $request, Skill $skill)
     {
-        //
+        $skill = $request->updateSkill();
+
+        return response([
+            'skill' => new SkillResource($skill),
+            'message' => 'Skill updated successfully',
+        ]);
     }
 
     /**

@@ -6,7 +6,7 @@ use App\Models\Skill;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Http\FormRequest;
 
-class SkillStoreRequest extends FormRequest
+class SkillUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,7 @@ class SkillStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:225|min:2',
+            'name' => 'sometimes|string|max:225|min:2',
             'description' => 'nullable|string|min:2',
 
             'tags' => 'nullable|array|min:1',
@@ -36,18 +36,18 @@ class SkillStoreRequest extends FormRequest
     }
 
 
-    public function storeSkill(): Skill
+    public function updateSkill(): Skill
     {
         return DB::transaction(function () {
-            return Skill::create([
-                // 'user_id' => auth()->user()->id,
-                'user_id' => 1,
 
-                'name' => $this->name,
-                'description' => $this->description,
-                'tags' => $this->tags,
-                'metadata' => $this->metadata,
+            $this->skill->update([
+                'name' => $this->exists('name') ? $this->name : $this->skill->name,
+                'description' => $this->exists('description') ? $this->description : $this->skill->description,
+                'tags' => $this->exists('tags') ? $this->tags : $this->skill->tags,
+                'metadata' => $this->exists('metadata') ? $this->metadata : $this->skill->metadata,
             ]);
+
+            return $this->skill->refresh();
         });
     }
 
