@@ -59,6 +59,14 @@ class SkillController extends Controller
      */
     public function destroy(Skill $skill)
     {
-        //
+        if ($skill->remove()) {
+            return response([
+                'message' => 'Skill deleted successfully',
+            ]);
+        }
+
+        return response([
+            'message' => 'Skill can`t be deleted successfully',
+        ], 409);
     }
 }

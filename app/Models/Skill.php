@@ -38,4 +38,9 @@ class Skill extends Model
     ## Scopes
 
     ## Other Methods
+
+    public function remove(): bool
+    {
+        return $this->delete();
+    }
 }
